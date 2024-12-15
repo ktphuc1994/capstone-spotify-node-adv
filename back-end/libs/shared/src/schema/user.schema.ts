@@ -6,10 +6,10 @@ const loginRequestSchema = z.object({
 });
 
 const createUserRequestSchema = z.object({
+  user_name: z.string(),
   first_name: z.string().nullable().optional(),
   last_name: z.string().nullable().optional(),
   email: z.string().email(),
-  phone: z.string().nullable().optional(),
   password: z.string(),
 });
 

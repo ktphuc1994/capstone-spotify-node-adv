@@ -15,5 +15,5 @@ RUN yarn run build auth
 
 CMD [ "node", "dist/apps/auth/main" ]
 
-# docker build . --file apps/auth/Dockerfile -t baemin-backend-auth-nestjs-img
-# docker run -d --name baemin-backend-auth-nestjs-container --network node_network baemin-backend-auth-nestjs-img
+# docker build . --file apps/auth/Dockerfile -t spotify-backend-auth-nestjs-img
+# docker run -d --name spotify-backend-auth-nestjs-container --network node_network spotify-backend-auth-nestjs-img

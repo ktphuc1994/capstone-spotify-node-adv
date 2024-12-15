@@ -14,7 +14,7 @@ model user {
   email                                   String               @db.VarChar(255)
   first_name                              String?              @db.VarChar(255)
   last_name                               String?              @db.VarChar(255)
-  password                                String?              @db.VarChar(255)
+  password                                String               @db.VarChar(255)
   friend_list_friend_list_friend_idTouser friend_list[]        @relation("friend_list_friend_idTouser")
   friend_list_friend_list_user_idTouser   friend_list[]        @relation("friend_list_user_idTouser")
   playlist                                playlist[]
