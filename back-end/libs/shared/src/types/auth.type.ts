@@ -3,6 +3,7 @@ type AccessToken = {
 };
 
 type AccessTokenPayload = {
+  user_name: string;
   email: string;
   user_id: number;
 };

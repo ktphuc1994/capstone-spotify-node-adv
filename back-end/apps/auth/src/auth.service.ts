@@ -36,6 +36,7 @@ export class AuthService {
 
   async login(user: User): Promise<AccessToken> {
     const payload: AccessTokenPayload = {
+      user_name: user.user_name,
       email: user.email,
       user_id: user.user_id,
     };
@@ -44,10 +45,10 @@ export class AuthService {
 
   async register(user: CreateUserRequest): Promise<AccessToken> {
     const existingUser = await this.prismaService.user.findFirst({
-      where: { email: user.email },
+      where: { OR: [{ email: user.email }, { user_name: user.user_name }] },
     });
     if (existingUser) {
-      throw new BadRequestException('Email đã tồn tại');
+      throw new BadRequestException('Người dùng đã tồn tại');
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10);

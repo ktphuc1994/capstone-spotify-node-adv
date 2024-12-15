@@ -4,6 +4,7 @@ const loginRequestSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
 });
+type LoginRequest = z.infer<typeof loginRequestSchema>;
 
 const createUserRequestSchema = z.object({
   user_name: z.string(),
@@ -12,25 +13,14 @@ const createUserRequestSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
+type CreateUserRequest = z.infer<typeof createUserRequestSchema>;
 
 const userSchema = createUserRequestSchema.extend({
   user_id: z.number(),
 });
-
-const addressSchema = z.object({
-  address_id: z.number(),
-  user_id: z.number(),
-  full_address: z.string(),
-});
-
-const userProfileSchema = userSchema.omit({ password: true }).extend({
-  address: addressSchema.array(),
-});
-
-type LoginRequest = z.infer<typeof loginRequestSchema>;
-type CreateUserRequest = z.infer<typeof createUserRequestSchema>;
 type User = z.infer<typeof userSchema>;
-type Address = z.infer<typeof addressSchema>;
+
+const userProfileSchema = userSchema.omit({ password: true });
 type UserProfile = z.infer<typeof userProfileSchema>;
 
 export {
@@ -40,6 +30,5 @@ export {
   type LoginRequest,
   type CreateUserRequest,
   type User,
-  type Address,
   type UserProfile,
 };
