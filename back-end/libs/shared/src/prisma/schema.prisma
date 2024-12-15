@@ -1,0 +1,110 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+model user {
+  user_id                                 Int                  @id @default(autoincrement())
+  user_name                               String               @db.VarChar(50)
+  email                                   String               @db.VarChar(255)
+  first_name                              String?              @db.VarChar(255)
+  last_name                               String?              @db.VarChar(255)
+  password                                String?              @db.VarChar(255)
+  friend_list_friend_list_friend_idTouser friend_list[]        @relation("friend_list_friend_idTouser")
+  friend_list_friend_list_user_idTouser   friend_list[]        @relation("friend_list_user_idTouser")
+  playlist                                playlist[]
+  user_artist_follow                      user_artist_follow[]
+}
+
+model album {
+  artist_id    Int
+  album_id     Int       @id @default(autoincrement())
+  album_name   String    @db.VarChar(255)
+  release_date DateTime? @db.Date
+  artist       artist    @relation(fields: [artist_id], references: [artist_id], onDelete: NoAction, onUpdate: NoAction)
+  song         song[]
+}
+
+model artist {
+  artist_id          Int                  @id @default(autoincrement())
+  artist_name        String               @db.VarChar(255)
+  monthly_listener   Int?                 @default(0)
+  is_verified        Boolean?
+  album              album[]
+  song               song[]
+  user_artist_follow user_artist_follow[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model friend_list {
+  user_id                          Int
+  friend_id                        Int
+  is_accepted                      Boolean @default(false)
+  user_friend_list_friend_idTouser user    @relation("friend_list_friend_idTouser", fields: [friend_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  user_friend_list_user_idTouser   user    @relation("friend_list_user_idTouser", fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, friend_id])
+}
+
+model genre {
+  genre_id   Int          @id @default(autoincrement())
+  genre_name String       @db.VarChar(255)
+  genre_song genre_song[]
+}
+
+model genre_song {
+  genre_id Int
+  song_id  Int
+  genre    genre @relation(fields: [genre_id], references: [genre_id], onDelete: NoAction, onUpdate: NoAction)
+  song     song  @relation(fields: [song_id], references: [song_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([genre_id, song_id])
+}
+
+model playlist {
+  playlist_id   Int             @id @default(autoincrement())
+  user_id       Int
+  playlist_name String          @db.VarChar(255)
+  user          user            @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  playlist_song playlist_song[]
+}
+
+model playlist_song {
+  playlist_id Int
+  song_id     Int
+  playlist    playlist @relation(fields: [playlist_id], references: [playlist_id], onDelete: NoAction, onUpdate: NoAction)
+  song        song     @relation(fields: [song_id], references: [song_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([playlist_id, song_id])
+}
+
+model song {
+  song_id       Int             @id @default(autoincrement())
+  artist_id     Int
+  album_id      Int?
+  cover         String?
+  release_date  DateTime?       @db.Date
+  total_view    Int?            @default(0)
+  lyric         String?
+  duration      String?         @db.VarChar(50)
+  description   String?
+  file_path     String?
+  genre_song    genre_song[]
+  playlist_song playlist_song[]
+  album         album?          @relation(fields: [album_id], references: [album_id], onDelete: NoAction, onUpdate: NoAction)
+  artist        artist          @relation(fields: [artist_id], references: [artist_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user_artist_follow {
+  user_id   Int
+  artist_id Int
+  artist    artist @relation(fields: [artist_id], references: [artist_id], onDelete: NoAction, onUpdate: NoAction)
+  user      user   @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([user_id, artist_id])
+}

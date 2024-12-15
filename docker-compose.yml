@@ -1,0 +1,61 @@
+version: '3.8'
+name: spotify-capstone-node-adv-khucthienphuc
+services:
+  spotify-backend-gateway-container:
+    container_name: spotify-backend-gateway-container
+    build:
+      context: ./back-end
+      dockerfile: ./apps/spotify-gateway-8080/Dockerfile
+    image: spotify-backend-gateway-img
+    ports:
+      - 8080:8080
+    env_file:
+      - ./back-end/.env.example
+    depends_on:
+      - spotify-backend-auth-container
+      - spotify-backend-user-container
+    networks:
+      - node_network
+
+  spotify-backend-auth-container:
+    container_name: spotify-backend-auth-container
+    build:
+      context: ./back-end
+      dockerfile: ./apps/auth/Dockerfile
+    image: spotify-backend-auth-img
+    env_file:
+      - ./back-end/.env.example
+    networks:
+      - node_network
+
+  spotify-backend-user-container:
+    container_name: spotify-backend-user-container
+    build:
+      context: ./back-end
+      dockerfile: ./apps/user/Dockerfile
+    image: spotify-backend-user-img
+    env_file:
+      - ./back-end/.env.example
+    networks:
+      - node_network
+
+  spotify-frontend-vite-container:
+    container_name: spotify-frontend-vite-container
+    build:
+      context: ./front-end
+      args:
+        BUILD_ENVIRONMENT: local
+        NEXT_PUBLIC_CLIENT_API_URL: http://localhost:8080
+    image: spotify-frontend-vite-img
+    ports:
+      - 3000:3000
+    env_file:
+      - ./front-end/.env.production.sample
+    depends_on:
+      - spotify-backend-gateway-container
+    networks:
+      - node_network
+
+networks:
+  node_network:
+    external: true
