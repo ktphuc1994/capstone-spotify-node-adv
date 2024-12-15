@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/spotify-gateway-8080/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/spotify-gateway-8080/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/spotify-gateway-8080",
+  "projects": {
+    "spotify-gateway-8080": {
+      "type": "application",
+      "root": "apps/spotify-gateway-8080",
+      "entryFile": "main",
+      "sourceRoot": "apps/spotify-gateway-8080/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/spotify-gateway-8080/tsconfig.app.json"
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    }
+  }
+}
