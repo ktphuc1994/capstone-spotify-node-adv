@@ -1,19 +1,5 @@
 import { SongInfo } from '../schema/song.schema';
-import { ShortenArtist } from './artist.type';
-
-type ShortenAlbum = {
-  album_id: number;
-  album_name: string;
-};
-type Album = ShortenAlbum & {
-  album_cover: string | null;
-  artist_id: number;
-  release_date: Date | null;
-};
-type AlBumArtistSong = Omit<Album, 'artist_id'> & {
-  artist: ShortenArtist;
-  song: Pick<SongInfo, 'song_id' | 'song_name' | 'duration'>[];
-};
+import { ShortenAlbum, ShortenArtist } from './artist.type';
 
 type Playlist = {
   playlist_id: number;
@@ -52,12 +38,4 @@ type GenreWithSong = Genre & {
   songList: SongAndArtist[];
 };
 
-export {
-  Album,
-  AlBumArtistSong,
-  Playlist,
-  PlaylistInfo,
-  Genre,
-  FullSongInfo,
-  GenreWithSong,
-};
+export { Playlist, PlaylistInfo, Genre, FullSongInfo, GenreWithSong };

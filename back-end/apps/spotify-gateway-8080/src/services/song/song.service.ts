@@ -16,12 +16,4 @@ export class SongService {
   getSongDetail(songId: string) {
     return this.songMicroservice.send(SONG_PATTERN.GET_SONG_DETAIL, songId);
   }
-
-  getAlbumList(artistId: string) {
-    return this.songMicroservice.send(SONG_PATTERN.GET_ALBUM_LIST, artistId);
-  }
-
-  getAlbumDetail(albumId: string) {
-    return this.songMicroservice.send(SONG_PATTERN.GET_ALBUM_DETAIL, albumId);
-  }
 }

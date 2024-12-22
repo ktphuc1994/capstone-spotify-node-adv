@@ -1,4 +1,4 @@
-import { Controller, UsePipes } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { SongService } from './song.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { SONG_PATTERN } from '@app/shared/constants/microservice-pattern.const';
@@ -28,19 +28,5 @@ export class SongController {
     @Payload(new EnhancedParseIntPipe({ fieldName: 'songId' })) songId: number,
   ) {
     return this.songService.getSongDetail(songId);
-  }
-
-  @MessagePattern(SONG_PATTERN.GET_ALBUM_LIST)
-  @UsePipes(EnhancedParseIntPipe)
-  getAlbumList(@Payload() artistId: number) {
-    return this.songService.getAlbumList(artistId);
-  }
-
-  @MessagePattern(SONG_PATTERN.GET_ALBUM_DETAIL)
-  getAlbumDetail(
-    @Payload(new EnhancedParseIntPipe({ fieldName: 'albumId' }))
-    albumId: number,
-  ) {
-    return this.songService.getAlbumDetail(albumId);
   }
 }

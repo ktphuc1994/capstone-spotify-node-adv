@@ -14,14 +14,4 @@ export class SongController {
   getSongDetail(@Param('songId') songId: string) {
     return this.songService.getSongDetail(songId);
   }
-
-  @Get('album/list/:artistId')
-  getAlbumList(@Param('artistId') albumId: string) {
-    return this.songService.getAlbumList(albumId);
-  }
-
-  @Get('album/:albumId')
-  getAlbumDetail(@Param('albumId') albumId: string) {
-    return this.songService.getAlbumDetail(albumId);
-  }
 }

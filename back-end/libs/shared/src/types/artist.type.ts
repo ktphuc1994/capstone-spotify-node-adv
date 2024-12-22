@@ -1,11 +1,28 @@
+import { SongInfo } from '../schema/song.schema';
+
 type ShortenArtist = {
   artist_id: number;
   artist_name: string;
 };
 
 type Artist = ShortenArtist & {
+  artist_about: string | null;
   monthly_listener: number;
   is_verified: boolean;
 };
 
-export { ShortenArtist, Artist };
+type ShortenAlbum = {
+  album_id: number;
+  album_name: string;
+};
+type Album = ShortenAlbum & {
+  album_cover: string | null;
+  artist_id: number;
+  release_date: Date | null;
+};
+type AlBumArtistSong = Omit<Album, 'artist_id'> & {
+  artist: ShortenArtist;
+  song: Pick<SongInfo, 'song_id' | 'song_name' | 'duration'>[];
+};
+
+export { ShortenArtist, Artist, ShortenAlbum, Album, AlBumArtistSong };
