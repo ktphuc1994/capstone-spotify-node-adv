@@ -2,7 +2,6 @@ import { SONG_PATTERN } from '@app/shared/constants/microservice-pattern.const';
 import { SONG_SERVICE_NAME } from '@app/shared/constants/microservice.const';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class SongService {
@@ -12,5 +11,17 @@ export class SongService {
 
   getByGenre(genreId?: string) {
     return this.songMicroservice.send(SONG_PATTERN.GET_BY_GENRE, genreId);
+  }
+
+  getSongDetail(songId: string) {
+    return this.songMicroservice.send(SONG_PATTERN.GET_SONG_DETAIL, songId);
+  }
+
+  getAlbumList(artistId: string) {
+    return this.songMicroservice.send(SONG_PATTERN.GET_ALBUM_LIST, artistId);
+  }
+
+  getAlbumDetail(albumId: string) {
+    return this.songMicroservice.send(SONG_PATTERN.GET_ALBUM_DETAIL, albumId);
   }
 }

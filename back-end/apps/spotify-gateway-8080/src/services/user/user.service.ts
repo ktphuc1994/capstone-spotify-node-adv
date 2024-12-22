@@ -17,4 +17,15 @@ export class UserService {
       userId,
     );
   }
+
+  getPlaylist(userId: number) {
+    return this.userMicroservice.send(USER_PATTERN.GET_PLAYLIST, userId);
+  }
+
+  getPlaylistDetail(userId: number, playlistId: string) {
+    return this.userMicroservice.send(USER_PATTERN.GET_PLAYLIST_DETAIL, {
+      playlistId,
+      userId,
+    });
+  }
 }

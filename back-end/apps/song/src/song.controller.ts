@@ -4,7 +4,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { SONG_PATTERN } from '@app/shared/constants/microservice-pattern.const';
 import { stringIntegerSchema } from '@app/shared/schema/common.schema';
 import { ZodValidationPipe } from '@app/shared/pipes/zodValidation.pipe';
-import { z } from 'zod';
+import { EnhancedParseIntPipe } from '@app/shared/pipes/parse-int.pipe';
 
 @Controller()
 export class SongController {
@@ -12,7 +12,6 @@ export class SongController {
 
   @MessagePattern(SONG_PATTERN.GET_BY_GENRE)
   getSongByGenre(@Payload() genreId?: string) {
-    console.log(genreId);
     let genreIdList: number[] | undefined = undefined;
     if (genreId) {
       const validatePipe = new ZodValidationPipe(stringIntegerSchema.array());
@@ -22,5 +21,26 @@ export class SongController {
     }
 
     return this.songService.getSongByGenre(genreIdList);
+  }
+
+  @MessagePattern(SONG_PATTERN.GET_SONG_DETAIL)
+  getSongDetail(
+    @Payload(new EnhancedParseIntPipe({ fieldName: 'songId' })) songId: number,
+  ) {
+    return this.songService.getSongDetail(songId);
+  }
+
+  @MessagePattern(SONG_PATTERN.GET_ALBUM_LIST)
+  @UsePipes(EnhancedParseIntPipe)
+  getAlbumList(@Payload() artistId: number) {
+    return this.songService.getAlbumList(artistId);
+  }
+
+  @MessagePattern(SONG_PATTERN.GET_ALBUM_DETAIL)
+  getAlbumDetail(
+    @Payload(new EnhancedParseIntPipe({ fieldName: 'albumId' }))
+    albumId: number,
+  ) {
+    return this.songService.getAlbumDetail(albumId);
   }
 }
