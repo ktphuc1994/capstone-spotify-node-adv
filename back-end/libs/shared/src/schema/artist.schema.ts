@@ -7,4 +7,15 @@ const albumListRequestSchema = z.object({
 });
 type AlbumListRequest = z.infer<typeof albumListRequestSchema>;
 
-export { albumListRequestSchema, type AlbumListRequest };
+const artistRequestSchema = z.object({
+  artistId: stringIntegerSchema.optional(),
+  artistName: z.string().optional(),
+});
+type ArtistRequest = z.infer<typeof artistRequestSchema>;
+
+export {
+  albumListRequestSchema,
+  artistRequestSchema,
+  type AlbumListRequest,
+  type ArtistRequest,
+};

@@ -6,12 +6,20 @@ import { EnhancedParseIntPipe } from '@app/shared/pipes/parse-int.pipe';
 import {
   AlbumListRequest,
   albumListRequestSchema,
+  ArtistRequest,
+  artistRequestSchema,
 } from '@app/shared/schema/artist.schema';
 import { ZodValidationPipe } from '@app/shared/pipes/zodValidation.pipe';
 
 @Controller()
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
+
+  @MessagePattern(ARTIST_PATTERN.SEARCH_ARTIST)
+  @UsePipes(new ZodValidationPipe(artistRequestSchema))
+  searchArtist(@Payload() artistRequest: ArtistRequest) {
+    return this.artistService.searchArtist(artistRequest);
+  }
 
   @MessagePattern(ARTIST_PATTERN.GET_ARTIST_DETAIL)
   @UsePipes(EnhancedParseIntPipe)

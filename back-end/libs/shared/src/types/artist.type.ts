@@ -6,6 +6,10 @@ type ShortenArtist = {
 };
 
 type Artist = ShortenArtist & {
+  artist_cover: string | null;
+};
+
+type FullArtist = Artist & {
   artist_about: string | null;
   monthly_listener: number;
   is_verified: boolean;
@@ -25,4 +29,11 @@ type AlBumArtistSong = Omit<Album, 'artist_id'> & {
   song: Pick<SongInfo, 'song_id' | 'song_name' | 'duration'>[];
 };
 
-export { ShortenArtist, Artist, ShortenAlbum, Album, AlBumArtistSong };
+export {
+  ShortenArtist,
+  Artist,
+  FullArtist,
+  ShortenAlbum,
+  Album,
+  AlBumArtistSong,
+};

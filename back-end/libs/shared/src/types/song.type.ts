@@ -28,6 +28,14 @@ type SongAndArtist = Pick<SongInfo, 'song_id' | 'song_name'> & {
   artist: ShortenArtist;
 };
 
+type ShortenSongInfo = Pick<
+  SongInfo,
+  'song_id' | 'song_name' | 'cover' | 'duration'
+> & {
+  album: ShortenAlbum | null;
+  artist: ShortenArtist;
+};
+
 type FullSongInfo = SongInfo & {
   artist: ShortenArtist;
   album: ShortenAlbum | null;
@@ -38,4 +46,11 @@ type GenreWithSong = Genre & {
   songList: SongAndArtist[];
 };
 
-export { Playlist, PlaylistInfo, Genre, FullSongInfo, GenreWithSong };
+export {
+  Playlist,
+  PlaylistInfo,
+  Genre,
+  ShortenSongInfo,
+  FullSongInfo,
+  GenreWithSong,
+};

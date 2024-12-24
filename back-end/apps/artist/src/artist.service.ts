@@ -1,13 +1,35 @@
 import { PrismaService } from '@app/shared/prisma/prisma.service';
-import { AlbumListRequest } from '@app/shared/schema/artist.schema';
-import { Album, AlBumArtistSong, Artist } from '@app/shared/types/artist.type';
+import {
+  AlbumListRequest,
+  ArtistRequest,
+} from '@app/shared/schema/artist.schema';
+import {
+  Album,
+  AlBumArtistSong,
+  Artist,
+  FullArtist,
+} from '@app/shared/types/artist.type';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ArtistService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getArtistDetail(artist_id: number): Promise<Artist> {
+  async searchArtist(artistRequest: ArtistRequest): Promise<Artist[]> {
+    const artistNameQuery = artistRequest.artistName
+      ? ({ contains: artistRequest.artistName, mode: 'insensitive' } as const)
+      : undefined;
+
+    return this.prismaService.artist.findMany({
+      where: {
+        artist_id: artistRequest.artistId,
+        artist_name: artistNameQuery,
+      },
+      select: { artist_id: true, artist_name: true, artist_cover: true },
+    });
+  }
+
+  async getArtistDetail(artist_id: number): Promise<FullArtist> {
     const artistInfo = await this.prismaService.artist.findFirst({
       where: { artist_id },
       omit: { created_at: true, updated_at: true },
@@ -22,7 +44,7 @@ export class ArtistService {
     albumRequest: AlbumListRequest,
   ): Promise<Omit<Album, 'artist_id'>[]> {
     const albumNameQuery = albumRequest.albumName
-      ? { contains: albumRequest.albumName }
+      ? ({ contains: albumRequest.albumName, mode: 'insensitive' } as const)
       : undefined;
 
     return this.prismaService.album.findMany({

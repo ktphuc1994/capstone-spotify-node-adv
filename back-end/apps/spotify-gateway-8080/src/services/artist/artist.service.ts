@@ -1,6 +1,9 @@
 import { ARTIST_PATTERN } from '@app/shared/constants/microservice-pattern.const';
 import { ARTIST_SERVICE_NAME } from '@app/shared/constants/microservice.const';
-import { AlbumListRequest } from '@app/shared/schema/artist.schema';
+import {
+  AlbumListRequest,
+  ArtistRequest,
+} from '@app/shared/schema/artist.schema';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 
@@ -9,6 +12,13 @@ export class ArtistService {
   constructor(
     @Inject(ARTIST_SERVICE_NAME) private artistMicroservice: ClientProxy,
   ) {}
+
+  searchArtist(artistRequest: ArtistRequest) {
+    return this.artistMicroservice.send(
+      ARTIST_PATTERN.SEARCH_ARTIST,
+      artistRequest,
+    );
+  }
 
   getArtistDetail(artistId: string) {
     return this.artistMicroservice.send(

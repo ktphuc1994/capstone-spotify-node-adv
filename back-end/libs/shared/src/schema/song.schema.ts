@@ -16,6 +16,15 @@ const songSchema = z.object({
 });
 type SongInfo = z.infer<typeof songSchema>;
 
+const songRequestSchema = z.object({
+  songId: stringIntegerSchema.optional(),
+  songName: z.string().optional(),
+  artistId: stringIntegerSchema.optional(),
+  albumId: stringIntegerSchema.optional(),
+  genreId: stringIntegerSchema.optional(),
+});
+type SongRequest = z.infer<typeof songRequestSchema>;
+
 const playlistRequestSchema = z.object({
   userId: z.number(),
   playlistId: stringIntegerSchema,
@@ -23,8 +32,10 @@ const playlistRequestSchema = z.object({
 type PlaylistRequest = z.infer<typeof playlistRequestSchema>;
 
 export {
-  playlistRequestSchema,
   songSchema,
-  type PlaylistRequest,
+  songRequestSchema,
+  playlistRequestSchema,
   type SongInfo,
+  type SongRequest,
+  type PlaylistRequest,
 };
