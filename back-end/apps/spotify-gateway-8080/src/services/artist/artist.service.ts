@@ -40,4 +40,18 @@ export class ArtistService {
       albumId,
     );
   }
+
+  followArtist(artistId: string, userId: number) {
+    return this.artistMicroservice.send(ARTIST_PATTERN.FOLLOW_ARTIST, {
+      artistId,
+      userId,
+    });
+  }
+
+  unfollowArtist(artistId: string, userId: number) {
+    return this.artistMicroservice.send(ARTIST_PATTERN.UNFOLLOW_ARTIST, {
+      artistId,
+      userId,
+    });
+  }
 }

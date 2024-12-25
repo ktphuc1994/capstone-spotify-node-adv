@@ -8,6 +8,8 @@ import {
   albumListRequestSchema,
   ArtistRequest,
   artistRequestSchema,
+  FollowRequest,
+  followRequestSchema,
 } from '@app/shared/schema/artist.schema';
 import { ZodValidationPipe } from '@app/shared/pipes/zodValidation.pipe';
 
@@ -39,5 +41,17 @@ export class ArtistController {
     albumId: number,
   ) {
     return this.artistService.getAlbumDetail(albumId);
+  }
+
+  @MessagePattern(ARTIST_PATTERN.FOLLOW_ARTIST)
+  @UsePipes(new ZodValidationPipe(followRequestSchema))
+  followArtist(@Payload() { artistId, userId }: FollowRequest) {
+    return this.artistService.followArtist(artistId, userId);
+  }
+
+  @MessagePattern(ARTIST_PATTERN.UNFOLLOW_ARTIST)
+  @UsePipes(new ZodValidationPipe(followRequestSchema))
+  unfollowArtist(@Payload() { artistId, userId }: FollowRequest) {
+    return this.artistService.unfollowArtist(artistId, userId);
   }
 }

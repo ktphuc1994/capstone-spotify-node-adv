@@ -25,17 +25,4 @@ const songRequestSchema = z.object({
 });
 type SongRequest = z.infer<typeof songRequestSchema>;
 
-const playlistRequestSchema = z.object({
-  userId: z.number(),
-  playlistId: stringIntegerSchema,
-});
-type PlaylistRequest = z.infer<typeof playlistRequestSchema>;
-
-export {
-  songSchema,
-  songRequestSchema,
-  playlistRequestSchema,
-  type SongInfo,
-  type SongRequest,
-  type PlaylistRequest,
-};
+export { songSchema, songRequestSchema, type SongInfo, type SongRequest };

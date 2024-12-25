@@ -1,3 +1,4 @@
+import { prismaErrorCodes } from '@app/shared/constants/prismaErrorCode.const';
 import { PrismaService } from '@app/shared/prisma/prisma.service';
 import {
   AlbumListRequest,
@@ -9,7 +10,16 @@ import {
   Artist,
   FullArtist,
 } from '@app/shared/types/artist.type';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  catchPrismaNotFound,
+  catchPrismaUnique,
+} from '@app/shared/utils/prisma';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ArtistService {
@@ -77,5 +87,25 @@ export class ArtistService {
     if (!albumInfo) throw new NotFoundException('Album không tồn tại');
 
     return albumInfo;
+  }
+
+  async followArtist(artist_id: number, user_id: number) {
+    try {
+      return await this.prismaService.user_artist_follow.create({
+        data: { artist_id, user_id },
+      });
+    } catch (error) {
+      catchPrismaUnique(error, 'Artist đã được follow từ trước');
+    }
+  }
+
+  async unfollowArtist(artist_id: number, user_id: number) {
+    try {
+      return await this.prismaService.user_artist_follow.delete({
+        where: { user_id_artist_id: { artist_id, user_id } },
+      });
+    } catch (error) {
+      catchPrismaNotFound(error, 'Artist không có trong danh sách follow');
+    }
   }
 }

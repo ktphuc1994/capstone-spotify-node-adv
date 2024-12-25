@@ -8,6 +8,8 @@ import {
   ARTIST_SERVICE_NAME,
   AUTH_QUEUE,
   AUTH_SERVICE_NAME,
+  PLAYLIST_QUEUE,
+  PLAYLIST_SERVICE_NAME,
   SONG_QUEUE,
   SONG_SERVICE_NAME,
   USER_QUEUE,
@@ -24,6 +26,8 @@ import { UserService } from './services/user/user.service';
 import { UserController } from './services/user/user.controller';
 import { ArtistController } from './services/artist/artist.controller';
 import { ArtistService } from './services/artist/artist.service';
+import { PlaylistController } from './services/playlist/playlist.controller';
+import { PlaylistService } from './services/playlist/playlist.service';
 
 @Module({
   imports: [
@@ -32,6 +36,7 @@ import { ArtistService } from './services/artist/artist.service';
     SharedModule.registerRmq(SONG_SERVICE_NAME, SONG_QUEUE),
     SharedModule.registerRmq(USER_SERVICE_NAME, USER_QUEUE),
     SharedModule.registerRmq(ARTIST_SERVICE_NAME, ARTIST_QUEUE),
+    SharedModule.registerRmq(PLAYLIST_SERVICE_NAME, PLAYLIST_QUEUE),
   ],
   controllers: [
     AppController,
@@ -39,6 +44,7 @@ import { ArtistService } from './services/artist/artist.service';
     SongController,
     UserController,
     ArtistController,
+    PlaylistController,
   ],
   providers: [
     AppService,
@@ -46,6 +52,7 @@ import { ArtistService } from './services/artist/artist.service';
     SongService,
     UserService,
     ArtistService,
+    PlaylistService,
     { provide: APP_FILTER, useClass: GatewayGlobalExceptionsFilter },
     { provide: APP_FILTER, useClass: GatewayHttpExceptionsFilter },
   ],

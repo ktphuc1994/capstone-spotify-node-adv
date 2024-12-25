@@ -63,6 +63,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/artist/tsconfig.app.json"
       }
+    },
+    "playlist": {
+      "type": "application",
+      "root": "apps/playlist",
+      "entryFile": "main",
+      "sourceRoot": "apps/playlist/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/playlist/tsconfig.app.json"
+      }
     }
   }
 }

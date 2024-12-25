@@ -13,9 +13,17 @@ const artistRequestSchema = z.object({
 });
 type ArtistRequest = z.infer<typeof artistRequestSchema>;
 
+const followRequestSchema = z.object({
+  artistId: stringIntegerSchema,
+  userId: z.number(),
+});
+type FollowRequest = z.infer<typeof followRequestSchema>;
+
 export {
   albumListRequestSchema,
   artistRequestSchema,
+  followRequestSchema,
   type AlbumListRequest,
   type ArtistRequest,
+  type FollowRequest,
 };
