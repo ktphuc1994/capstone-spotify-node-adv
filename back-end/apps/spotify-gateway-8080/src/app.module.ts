@@ -8,6 +8,8 @@ import {
   ARTIST_SERVICE_NAME,
   AUTH_QUEUE,
   AUTH_SERVICE_NAME,
+  CHAT_QUEUE,
+  CHAT_SERVICE_NAME,
   PLAYLIST_QUEUE,
   PLAYLIST_SERVICE_NAME,
   SONG_QUEUE,
@@ -37,6 +39,7 @@ import { PlaylistService } from './services/playlist/playlist.service';
     SharedModule.registerRmq(USER_SERVICE_NAME, USER_QUEUE),
     SharedModule.registerRmq(ARTIST_SERVICE_NAME, ARTIST_QUEUE),
     SharedModule.registerRmq(PLAYLIST_SERVICE_NAME, PLAYLIST_QUEUE),
+    SharedModule.registerRmq(CHAT_SERVICE_NAME, CHAT_QUEUE),
   ],
   controllers: [
     AppController,

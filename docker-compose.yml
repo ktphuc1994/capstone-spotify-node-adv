@@ -16,6 +16,8 @@ services:
       - spotify-backend-user-container
       - spotify-backend-song-container
       - spotify-backend-artist-container
+      - spotify-backend-playlist-container
+      - spotify-backend-chat-container
     networks:
       - node_network
 
@@ -58,6 +60,28 @@ services:
       context: ./back-end
       dockerfile: ./apps/artist/Dockerfile
     image: spotify-backend-artist-img
+    env_file:
+      - ./back-end/.env.example
+    networks:
+      - node_network
+
+  spotify-backend-playlist-container:
+    container_name: spotify-backend-playlist-container
+    build:
+      context: ./back-end
+      dockerfile: ./apps/playlist/Dockerfile
+    image: spotify-backend-playlist-img
+    env_file:
+      - ./back-end/.env.example
+    networks:
+      - node_network
+
+  spotify-backend-chat-container:
+    container_name: spotify-backend-chat-container
+    build:
+      context: ./back-end
+      dockerfile: ./apps/chat/Dockerfile
+    image: spotify-backend-chat-img
     env_file:
       - ./back-end/.env.example
     networks:
