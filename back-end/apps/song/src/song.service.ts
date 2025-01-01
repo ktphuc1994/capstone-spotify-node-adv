@@ -6,6 +6,7 @@ import {
   GenreWithSong,
   ShortenSongInfo,
 } from '@app/shared/types/song.type';
+import { filterPageAndPageSize } from '@app/shared/utils/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -21,6 +22,11 @@ export class SongService {
       ? { some: { genre_id: songRequest.genreId } }
       : undefined;
 
+    const { skip, take } = filterPageAndPageSize(
+      songRequest.page,
+      songRequest.pageSize,
+    );
+
     return this.prismaService.song.findMany({
       where: {
         song_name: songNameQuery,
@@ -29,6 +35,8 @@ export class SongService {
         artist_id: songRequest.artistId,
         genre_song: genreIdQuery,
       },
+      skip,
+      take,
       select: {
         song_id: true,
         song_name: true,

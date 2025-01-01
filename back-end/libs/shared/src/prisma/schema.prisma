@@ -9,18 +9,18 @@ datasource db {
 }
 
 model user {
-  user_id                                 Int                  @id @default(autoincrement())
-  user_name                               String               @db.VarChar(50)
-  email                                   String               @db.VarChar(255)
-  first_name                              String?              @db.VarChar(255)
-  last_name                               String?              @db.VarChar(255)
-  password                                String               @db.VarChar(255)
-  created_at                              DateTime?            @default(now()) @db.Timestamp(6)
-  updated_at                              DateTime?            @db.Timestamp(6)
-  friend_list_friend_list_friend_idTouser friend_list[]        @relation("friend_list_friend_idTouser")
-  friend_list_friend_list_user_idTouser   friend_list[]        @relation("friend_list_user_idTouser")
-  playlist                                playlist[]
-  user_artist_follow                      user_artist_follow[]
+  user_id                                   Int                  @id @default(autoincrement())
+  user_name                                 String               @db.VarChar(50)
+  email                                     String               @db.VarChar(255)
+  first_name                                String?              @db.VarChar(255)
+  last_name                                 String?              @db.VarChar(255)
+  password                                  String               @db.VarChar(255)
+  created_at                                DateTime?            @default(now()) @db.Timestamp(6)
+  updated_at                                DateTime?            @db.Timestamp(6)
+  friend_list_friend_list_creator_idTouser  friend_list[]        @relation("friend_list_creator_idTouser")
+  friend_list_friend_list_receiver_idTouser friend_list[]        @relation("friend_list_receiver_idTouser")
+  playlist                                  playlist[]
+  user_artist_follow                        user_artist_follow[]
 }
 
 model album {
@@ -49,17 +49,17 @@ model artist {
   user_artist_follow user_artist_follow[]
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model friend_list {
-  user_id                          Int
-  friend_id                        Int
-  is_accepted                      Boolean   @default(false)
-  created_at                       DateTime? @default(now()) @db.Timestamp(6)
-  updated_at                       DateTime? @db.Timestamp(6)
-  user_friend_list_friend_idTouser user      @relation("friend_list_friend_idTouser", fields: [friend_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-  user_friend_list_user_idTouser   user      @relation("friend_list_user_idTouser", fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  friend_list_id                     Int       @id @default(autoincrement())
+  creator_id                         Int
+  receiver_id                        Int
+  is_accepted                        Boolean   @default(false)
+  created_at                         DateTime? @default(now()) @db.Timestamp(6)
+  updated_at                         DateTime? @updatedAt @db.Timestamp(6)
+  user_friend_list_creator_idTouser  user      @relation("friend_list_creator_idTouser", fields: [creator_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_creator")
+  user_friend_list_receiver_idTouser user      @relation("friend_list_receiver_idTouser", fields: [receiver_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "fk_receiver")
 
-  @@id([user_id, friend_id])
+  @@unique([creator_id, receiver_id], map: "unique_creator_receiver")
 }
 
 model genre {

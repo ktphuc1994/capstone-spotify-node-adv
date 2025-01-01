@@ -1,5 +1,8 @@
 import { z } from 'zod';
-import { stringIntegerSchema } from './common.schema';
+import {
+  queryPaginationRequestSchema,
+  stringIntegerSchema,
+} from './common.schema';
 
 const songSchema = z.object({
   song_id: z.number(),
@@ -16,13 +19,13 @@ const songSchema = z.object({
 });
 type SongInfo = z.infer<typeof songSchema>;
 
-const songRequestSchema = z.object({
+const songRequestSchema = queryPaginationRequestSchema.extend({
   songId: stringIntegerSchema.optional(),
   songName: z.string().optional(),
   artistId: stringIntegerSchema.optional(),
   albumId: stringIntegerSchema.optional(),
   genreId: stringIntegerSchema.optional(),
 });
-type SongRequest = z.infer<typeof songRequestSchema>;
+type SongRequest = z.input<typeof songRequestSchema>;
 
 export { songSchema, songRequestSchema, type SongInfo, type SongRequest };

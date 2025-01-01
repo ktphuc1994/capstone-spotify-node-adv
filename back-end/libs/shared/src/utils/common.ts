@@ -1,9 +1,9 @@
-const filterPageAndPageSize = (
-  page?: number,
-  pageSize?: number,
-): { skip?: number; take?: number } => {
-  if (!page || !pageSize) return {};
+import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '../constants/common';
 
+const filterPageAndPageSize = (
+  page: number = DEFAULT_PAGE,
+  pageSize: number = DEFAULT_PAGE_SIZE,
+): { skip?: number; take?: number } => {
   return { take: pageSize, skip: (page - 1) * pageSize };
 };
 
