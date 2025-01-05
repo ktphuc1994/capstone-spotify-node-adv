@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js" crossorigin="anonymous"></script>
+    <script>
+        const socket = io('http://localhost:8081/presence', {
+            extraHeaders: {
+                authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ1c2VyMiIsImVtYWlsIjoidXNlcjJAZXhhbXBsZS5jb20iLCJ1c2VyX2lkIjoyLCJpYXQiOjE3MzYwNTc5ODgsImV4cCI6MTc2NzU5Mzk4OH0.DI6sIpB-uuHQVe6DBKpnCDo4AfAY97Sq9A3MMOIEqn0"
+            },
+        });
+        socket.on('connect', function () {
+            console.log('Connected');
+        });
+        socket.on('ACTIVE_FRIEND', function (data) {
+            console.log('ACTIVE_FRIEND', data);
+        });
+        socket.on('exception', function (data) {
+            console.log('exception', data);
+        });
+        socket.on('disconnect', function () {
+            console.log('Disconnected');
+        });
+    </script>
+</head>
+
+<body>
+    <input id="messageInput" />
+
+    <script>
+        const inputMessage = document.getElementById("messageInput");
+        inputMessage.addEventListener("keyup", (e) => {
+            if (e.key !== "Enter") return;
+            const inputValue = e.target.value;
+
+            if (inputValue === "OFF") {
+                socket.emit("UPDATE_ACTIVE_STATUS", false);
+                return;
+            }
+
+            if (inputValue === "ON") {
+                socket.emit("UPDATE_ACTIVE_STATUS", true);
+                return
+            }
+        })
+    </script>
+</body>
+
+</html>

@@ -8,9 +8,9 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { AUTH_SERVICE_NAME } from '../constants/microservice.const';
-import { Request } from 'express';
 import { AUTH_PATTERN } from '../constants/microservice-pattern.const';
 import { UserInReq } from '../types/shared.type';
+import { extractTokenFromHeader } from '../utils/auth';
 
 @Injectable()
 export class AppGuard implements CanActivate {
@@ -20,7 +20,7 @@ export class AppGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authToken = this.extractTokenFromHeader(request);
+    const authToken = extractTokenFromHeader(request.headers.authorization);
 
     if (!authToken) {
       throw new UnauthorizedException();
@@ -39,10 +39,5 @@ export class AppGuard implements CanActivate {
     }
 
     return true;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
   }
 }

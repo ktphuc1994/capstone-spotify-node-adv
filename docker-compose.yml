@@ -81,6 +81,8 @@ services:
     build:
       context: ./back-end
       dockerfile: ./apps/chat/Dockerfile
+    ports:
+      - 8081:8081
     image: spotify-backend-chat-img
     env_file:
       - ./back-end/.env.example
