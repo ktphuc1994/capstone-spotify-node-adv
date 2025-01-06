@@ -3,8 +3,8 @@ import { UserService } from './user.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { USER_PATTERN } from '@app/shared/constants/microservice-pattern.const';
 import {
-  CreateFriendRequest,
-  createFriendRequestSchema,
+  FriendRequest,
+  friendRequestSchema,
   FriendListRequest,
   friendListRequestSchema,
   UpdateFriendRequest,
@@ -27,6 +27,12 @@ export class UserController {
     return this.userService.getFriendList(requestInfo);
   }
 
+  @MessagePattern(USER_PATTERN.CHECK_FRIEND)
+  @UsePipes(new ZodValidationPipe(friendRequestSchema))
+  checkFriend(@Payload() requestInfo: FriendRequest) {
+    return this.userService.checkFriend(requestInfo);
+  }
+
   @MessagePattern(USER_PATTERN.GET_REQUESTED_FRIEND_LIST)
   @UsePipes(new ZodValidationPipe(friendListRequestSchema))
   getRequestedFriendList(@Payload() requestInfo: FriendListRequest) {
@@ -40,8 +46,8 @@ export class UserController {
   }
 
   @MessagePattern(USER_PATTERN.SEND_FRIEND_REQUEST)
-  @UsePipes(new ZodValidationPipe(createFriendRequestSchema))
-  sendFriendRequest(@Payload() requestInfo: CreateFriendRequest) {
+  @UsePipes(new ZodValidationPipe(friendRequestSchema))
+  sendFriendRequest(@Payload() requestInfo: FriendRequest) {
     return this.userService.sendFriendRequest(
       requestInfo.userId,
       requestInfo.friendId,

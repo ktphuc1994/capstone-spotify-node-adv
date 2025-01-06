@@ -2,6 +2,7 @@ import { PrismaService } from '@app/shared/prisma/prisma.service';
 import {
   FriendList,
   FriendListRequest,
+  FriendRequest,
   User,
   userSchema,
 } from '@app/shared/schema/user.schema';
@@ -95,6 +96,21 @@ export class UserService {
 
       return { friendListId: relationInfo.friend_list_id, friendInfo };
     });
+  }
+
+  async checkFriend({ userId, friendId }: FriendRequest) {
+    const friendRelation = await this.prismaService.friend_list.findFirst({
+      where: {
+        OR: [
+          { creator_id: userId, receiver_id: friendId },
+          { creator_id: friendId, receiver_id: userId },
+        ],
+        is_accepted: true,
+      },
+      select: { friend_list_id: true },
+    });
+
+    return !!friendRelation;
   }
 
   async getRequestedFriendList({

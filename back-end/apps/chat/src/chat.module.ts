@@ -8,22 +8,32 @@ import {
   USER_QUEUE,
   USER_SERVICE_NAME,
 } from '@app/shared/constants/microservice.const';
-import { CacheModule } from '@nestjs/cache-manager';
-import { GatewayGlobalExceptionsFilter } from 'apps/spotify-gateway-8080/src/exceptions/global-exception.filter';
-import { GatewayHttpExceptionsFilter } from 'apps/spotify-gateway-8080/src/exceptions/http-exception.filter';
 import { PresenceGateway } from './gateway/presence.gateway';
+import { PrismaModule } from '@app/shared/prisma/prisma.module';
+import { ChatGateway } from './gateway/chat.gateway';
+import { ChatService } from './services/chat.service';
+import { RedisModule } from '@app/shared/redis/redis.module';
+import { MicroserviceHttpExceptionFilter } from '@app/shared/exceptions/microservice-http-exceptions.filter';
+import { PrismaClientExceptionFilter } from '@app/shared/exceptions/prisma-client-exceptions.filter';
+import { PresenceService } from './services/presence.service';
+import { ChatController } from './services/chat.controller';
 
 @Module({
   imports: [
-    CacheModule.register(),
     ConfigModule.forRoot({ isGlobal: true, envFilePath: './.env' }),
+    PrismaModule,
+    RedisModule,
     SharedModule.registerRmq(AUTH_SERVICE_NAME, AUTH_QUEUE),
     SharedModule.registerRmq(USER_SERVICE_NAME, USER_QUEUE),
   ],
+  controllers: [ChatController],
   providers: [
     PresenceGateway,
-    { provide: APP_FILTER, useClass: GatewayGlobalExceptionsFilter },
-    { provide: APP_FILTER, useClass: GatewayHttpExceptionsFilter },
+    ChatGateway,
+    ChatService,
+    PresenceService,
+    { provide: APP_FILTER, useClass: MicroserviceHttpExceptionFilter },
+    { provide: APP_FILTER, useClass: PrismaClientExceptionFilter },
   ],
 })
 export class ChatModule {}

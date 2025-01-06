@@ -1,7 +1,7 @@
 import { USER_PATTERN } from '@app/shared/constants/microservice-pattern.const';
 import { USER_SERVICE_NAME } from '@app/shared/constants/microservice.const';
 import {
-  CreateFriendRequest,
+  FriendRequest,
   FriendListRequest,
   UpdateFriendRequest,
   User,
@@ -41,7 +41,7 @@ export class UserService {
     );
   }
 
-  sendFriendRequest(requestInfo: CreateFriendRequest) {
+  sendFriendRequest(requestInfo: FriendRequest) {
     return this.userMicroservice.send(
       USER_PATTERN.SEND_FRIEND_REQUEST,
       requestInfo,

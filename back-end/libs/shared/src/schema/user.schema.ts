@@ -30,11 +30,11 @@ type FriendList = {
   friendInfo: Omit<User, 'email'>;
 };
 
-const createFriendRequestSchema = z.object({
+const friendRequestSchema = z.object({
   userId: z.number(),
   friendId: z.number(),
 });
-type CreateFriendRequest = z.infer<typeof createFriendRequestSchema>;
+type FriendRequest = z.infer<typeof friendRequestSchema>;
 
 const updateFriendRequestSchema = z.object({
   userId: z.number(),
@@ -47,13 +47,13 @@ export {
   createUserRequestSchema,
   userSchema,
   friendListRequestSchema,
-  createFriendRequestSchema,
+  friendRequestSchema,
   updateFriendRequestSchema,
   type LoginRequest,
   type CreateUserRequest,
   type User,
   type FriendListRequest,
   type FriendList,
-  type CreateFriendRequest,
+  type FriendRequest,
   type UpdateFriendRequest,
 };

@@ -8,6 +8,8 @@ import {
   ARTIST_SERVICE_NAME,
   AUTH_QUEUE,
   AUTH_SERVICE_NAME,
+  CHAT_QUEUE,
+  CHAT_SERVICE_NAME,
   PLAYLIST_QUEUE,
   PLAYLIST_SERVICE_NAME,
   SONG_QUEUE,
@@ -28,6 +30,8 @@ import { ArtistController } from './services/artist/artist.controller';
 import { ArtistService } from './services/artist/artist.service';
 import { PlaylistController } from './services/playlist/playlist.controller';
 import { PlaylistService } from './services/playlist/playlist.service';
+import { ChatController } from './services/chat/chat.controller';
+import { ChatService } from './services/chat/chat.service';
 
 @Module({
   imports: [
@@ -37,6 +41,7 @@ import { PlaylistService } from './services/playlist/playlist.service';
     SharedModule.registerRmq(USER_SERVICE_NAME, USER_QUEUE),
     SharedModule.registerRmq(ARTIST_SERVICE_NAME, ARTIST_QUEUE),
     SharedModule.registerRmq(PLAYLIST_SERVICE_NAME, PLAYLIST_QUEUE),
+    SharedModule.registerRmq(CHAT_SERVICE_NAME, CHAT_QUEUE),
   ],
   controllers: [
     AppController,
@@ -45,6 +50,7 @@ import { PlaylistService } from './services/playlist/playlist.service';
     UserController,
     ArtistController,
     PlaylistController,
+    ChatController,
   ],
   providers: [
     AppService,
@@ -53,6 +59,7 @@ import { PlaylistService } from './services/playlist/playlist.service';
     UserService,
     ArtistService,
     PlaylistService,
+    ChatService,
     { provide: APP_FILTER, useClass: GatewayGlobalExceptionsFilter },
     { provide: APP_FILTER, useClass: GatewayHttpExceptionsFilter },
   ],

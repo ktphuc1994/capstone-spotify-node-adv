@@ -20,27 +20,55 @@
         socket.on('disconnect', function () {
             console.log('Disconnected');
         });
+
+        const socketChat = io('http://localhost:8081/chat', {
+            extraHeaders: {
+                authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ1c2VyMiIsImVtYWlsIjoidXNlcjJAZXhhbXBsZS5jb20iLCJ1c2VyX2lkIjoyLCJpYXQiOjE3MzYwNTc5ODgsImV4cCI6MTc2NzU5Mzk4OH0.DI6sIpB-uuHQVe6DBKpnCDo4AfAY97Sq9A3MMOIEqn0"
+            },
+        });
+        socketChat.on('connect', function () {
+            console.log('Chat Connected');
+        });
+        socketChat.on('GET_NEW_MESSAGE', function (data) {
+            console.log('GET_NEW_MESSAGE', data);
+        });
+        socketChat.on('GET_ALL_CONVERSATION', function (data) {
+            console.log("GET_ALL_CONVERSATION", data)
+        })
+        socketChat.on('exception', function (data) {
+            console.log('Chat exception', data);
+        });
+        socketChat.on('disconnect', function () {
+            console.log('Chat Disconnected');
+        });
     </script>
 </head>
 
 <body>
-    <input id="messageInput" />
+    <div style="display: flex; gap: 1rem; padding: 1rem 2rem;">
+        <button onclick="logOn()">Log on</button>
+        <button onclick="logOut()">Log out</button>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <label for="chatInput">Chat Input</label>
+        <input id="chatInput" />
+    </div>
+
 
     <script>
-        const inputMessage = document.getElementById("messageInput");
-        inputMessage.addEventListener("keyup", (e) => {
+        const logOn = () => {
+            socket.emit("UPDATE_ACTIVE_STATUS", true);
+        }
+        const logOut = () => {
+            socket.emit("UPDATE_ACTIVE_STATUS", false);
+        }
+
+        const chatInput = document.getElementById('chatInput')
+        chatInput.addEventListener('keyup', (e) => {
             if (e.key !== "Enter") return;
-            const inputValue = e.target.value;
+            const inputValue = e.target.value
 
-            if (inputValue === "OFF") {
-                socket.emit("UPDATE_ACTIVE_STATUS", false);
-                return;
-            }
-
-            if (inputValue === "ON") {
-                socket.emit("UPDATE_ACTIVE_STATUS", true);
-                return
-            }
+            socketChat.emit("SEND_MESSAGE", { message: inputValue, conversationId: 1 })
         })
     </script>
 </body>

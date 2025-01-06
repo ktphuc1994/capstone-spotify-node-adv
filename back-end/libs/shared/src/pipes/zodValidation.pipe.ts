@@ -3,10 +3,14 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { z, ZodError, ZodSchema, ZodType } from 'zod';
+import { WsException } from '@nestjs/websockets';
+import { ZodError, ZodType } from 'zod';
 
 export class ZodValidationPipe<T> implements PipeTransform {
-  constructor(private schema: ZodType<T>) {}
+  constructor(
+    private schema: ZodType<T>,
+    private errorType?: 'ws' | 'http',
+  ) {}
 
   transform(value: unknown, _metadata: ArgumentMetadata): T {
     try {
@@ -21,6 +25,10 @@ export class ZodValidationPipe<T> implements PipeTransform {
         const issuePath = zodIssue.path.join('.');
         errorMessage += `'${issuePath}' ${zodIssue.message}. `;
       });
+
+      if (this.errorType === 'ws') {
+        throw new WsException(errorMessage);
+      }
 
       throw new BadRequestException(errorMessage);
     }

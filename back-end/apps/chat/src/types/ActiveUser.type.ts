@@ -1,7 +1,9 @@
-type ActiveUser = {
+type ConversationUser = {
   id: number;
   socketId: string;
+};
+type ActiveUser = ConversationUser & {
   isActive: boolean;
 };
 
-export { type ActiveUser };
+export { ActiveUser, ConversationUser };
